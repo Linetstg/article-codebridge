@@ -39,7 +39,7 @@ const App: React.FC<{}> = () => {
 
 
   const Console = () => {
-    console.log(article)
+    console.log(article, 'hello')
   }
 
 
