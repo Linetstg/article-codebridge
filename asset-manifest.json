@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/article-codebridge/static/css/main.78e1487d.chunk.css",
-    "main.js": "/article-codebridge/static/js/main.b040d647.chunk.js",
-    "main.js.map": "/article-codebridge/static/js/main.b040d647.chunk.js.map",
+    "main.js": "/article-codebridge/static/js/main.28d82c7e.chunk.js",
+    "main.js.map": "/article-codebridge/static/js/main.28d82c7e.chunk.js.map",
     "runtime-main.js": "/article-codebridge/static/js/runtime-main.63e39cfb.js",
     "runtime-main.js.map": "/article-codebridge/static/js/runtime-main.63e39cfb.js.map",
     "static/js/2.37e05d84.chunk.js": "/article-codebridge/static/js/2.37e05d84.chunk.js",
@@ -15,6 +15,6 @@
     "static/js/runtime-main.63e39cfb.js",
     "static/js/2.37e05d84.chunk.js",
     "static/css/main.78e1487d.chunk.css",
-    "static/js/main.b040d647.chunk.js"
+    "static/js/main.28d82c7e.chunk.js"
   ]
 }
