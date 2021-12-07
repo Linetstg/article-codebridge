@@ -1,131 +1,72 @@
 import React, { useState, useEffect } from 'react';
-
 import './App.scss';
 
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { maxWidth } from '@mui/system';
+import { Article } from './types/types';
+import { getArticles } from './api/api';
+import { DetailsPage } from './components/DetailsPage/DetailsPage';
+import { HomePage } from './components/HomePage/HomePage';
 
-
-interface Article {
-  id: number;
-  title: string;
-  url: string;
-  imageUrl: string;
-  newsSite: string;
-  summary: string;
-  description: string;
-  imgUrl: string;
-}
+import GlobalStyles from '@mui/material/GlobalStyles';
 
 const App: React.FC<{}> = () => {
   const [article, setArticle] = useState<Article[]>([])
   const [blogs, setBlogs] = useState('')
   const [visibleData, setVisibleData] = useState<Article[]>([])
   const [selectedObj, setSelectedObj] = useState<any>(null)
+  const inputBlog = blogs.split(' ');
+
 
   useEffect(() => {
-    fetch(`https://api.spaceflightnewsapi.net/v3/blogs`)
-      .then(response => response.json())
-      .then(json => { setArticle(json); setVisibleData(json) })
-
-  }, [])
-
-  const inputBlog = blogs.split(' ')
-
-  // console.log(visibleData)
+    (async () => {
+      const data = (await getArticles(inputBlog)).data;
+      setArticle(data);
+      console.log(data, inputBlog)
+    })();
+  }, [blogs])
 
   const handleChange = (event: any) => {
     setBlogs(event.target.value);
-    
-    let arrTest:any = [];
-    
-     inputBlog.map(el => {
-       
-      arrTest.push( article.filter(art => (
-        art.title.toLowerCase().includes(el.toLowerCase()) ||
-        art.summary.toLowerCase().includes(el.toLowerCase())
-      )))
-    })
 
-    console.log(arrTest)
   };
 
-
   return (
-    <div className="App">
-      <input
-        type="text"
-        id="search-query"
-        className="input"
-        placeholder="Type search word"
-        onChange={handleChange}
-        value={blogs}
+
+    <div>
+      <GlobalStyles
+        styles={{
+          body: { fontFamily: 'Montserrat' }
+        }}
       />
-      <div className="cards">
+      <div >
         {selectedObj
           ? (
-            <div>
-              <Card sx={{ maxWidth: 1050}}>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={selectedObj.imageUrl}
-                  alt="green iguana"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {selectedObj.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {selectedObj.summary}
-                  </Typography>
-                </CardContent>
-              </Card>
-              <ArrowRightAltIcon></ArrowRightAltIcon>
-              <Button
-                size="small"
-                onClick={() => { setSelectedObj(null) }}
-              >
-                Learn More
-              </Button>
-            </div>
+            <>
+              <DetailsPage details={selectedObj} setSelectedObj={setSelectedObj} />
+            </>
+
           )
           : (
-            visibleData?.map(art => (
-              <div key={art.id} className="cards__element">
-                <Card sx={{ maxWidth: 345 }}>
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={art.imageUrl}
-                    alt="green iguana"
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      {art.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {art.summary}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      onClick={() => { setSelectedObj(art); console.log({ selectedObj }) }}
-                    >
-                      Learn More
-                    </Button>
-                    <ArrowRightAltIcon></ArrowRightAltIcon>
-                  </CardActions>
-                </Card>
-              </div>
-            ))
+            <div className="home__page">
+              
+                <div className="search-bar">
+                  <label htmlFor="search-bar__area">
+                    <p className="search-bar__title">
+                      Filter by keywords
+                    </p>
+
+                    <input
+                      type="text"
+                      className="search-bar__area"
+                      id="search-bar__area"
+                      placeholder="Enter some words"
+                      value={blogs}
+                      onChange={handleChange}
+                    />
+                  </label>
+                </div>
+              <p className="section__title">Results: {article.length}</p>
+              <HomePage articles={article} inputBlog={inputBlog} setSelectedObj={setSelectedObj}/>
+            </div>
           )}
       </div>
     </div>
